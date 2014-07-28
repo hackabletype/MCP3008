@@ -45,7 +45,6 @@ class MCP3008(object):
         if DEBUG:
             print("MCP3008 pins in use: {}".format(MCP3008.__adcPinsUsed))
 
-
     def readadc(self):
         """ read SPI data from MCP3008 chip, 8 possible adc's (0 through 7).
             this fn is based on code from Mikey Sklar's article:
