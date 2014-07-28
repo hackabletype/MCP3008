@@ -4,13 +4,17 @@ __author__ = 'nathan.waddington@akqa.com'
 
 import RPi.GPIO as GPIO
 
+DEBUG = 1
 
-class MCP3008 (object):
 
-    __pinsused = set()
+class MCP3008(object):
+    __adcPinsUsed = set()
 
     def __init__(self, adcnum, clockpin, mosipin, misopin, cspin):
         """MCP3008 Initializer -- set up vars, check for bounds"""
+
+        if DEBUG:
+            print("initializing MCP3008 for adc pin {}".format(adcnum))
 
         if 0 <= adcnum <= 7:
             self._adcnum = adcnum
@@ -22,7 +26,9 @@ class MCP3008 (object):
         self._misopin = misopin
         self._cspin = cspin
 
-        if len(MCP3008.__pinsused) == 0:
+        if len(MCP3008.__adcPinsUsed) == 0:
+            if DEBUG:
+                print("First instance of MCP3008, initializing SPI pins")
             GPIO.setmode(GPIO.BCM)
 
             # set up the SPI interface pins
@@ -31,12 +37,13 @@ class MCP3008 (object):
             GPIO.setup(self._clockpin, GPIO.OUT)
             GPIO.setup(self._cspin, GPIO.OUT)
 
-        if adcnum in MCP3008.__pinsused:
+        if adcnum in MCP3008.__adcPinsUsed:
             raise SelectedPinInUseException(
-                "Pin already used. MCP3008 pins currently in use: {}".format(MCP3008.__pinsused))
+                "Pin already used. MCP3008 adc pins currently in use: {}".format(MCP3008.__adcPinsUsed))
 
-        MCP3008.__pinsused.add(adcnum)
-        print("MCP3008 pins in use: {}".format(MCP3008.__pinsused))
+        MCP3008.__adcPinsUsed.add(adcnum)
+        if DEBUG:
+            print("MCP3008 pins in use: {}".format(MCP3008.__adcPinsUsed))
 
 
     def readadc(self):
@@ -74,6 +81,22 @@ class MCP3008 (object):
 
         adcout >>= 1  # first bit is 'null' so drop it
         return adcout
+
+
+    def __del__(self):
+        if DEBUG:
+            print("deleting MCP3008 instance {}".format(self._adcnum))
+        if len(MCP3008.__adcPinsUsed) > 0:  # remove the current pin from the pinused set
+            if DEBUG:
+                print("removing adc pin: {}".format(self._adcnum))
+            MCP3008.__adcPinsUsed.remove(self._adcnum)
+            if DEBUG:
+                print("adc pins remaining: {}".format(MCP3008.__adcPinsUsed))
+
+        if len(MCP3008.__adcPinsUsed) == 0:  # Cleanup the GPIO b/c we aren't using the pins anymore
+            if DEBUG:
+                print("Last adc pin removed, cleaning up GPIO")
+            GPIO.cleanup()
 
 
 class InvalidPinSelectionException(Exception):
