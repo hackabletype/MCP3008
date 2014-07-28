@@ -16,7 +16,7 @@ from time import sleep
 import sys
 
 from mcp3008spi import MCP3008
-import RPi.GPIO as GPIO
+
 
 
 # globals

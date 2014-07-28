@@ -4,7 +4,7 @@ __author__ = 'nathan.waddington@akqa.com'
 
 import RPi.GPIO as GPIO
 
-DEBUG = 1
+DEBUG = 0
 
 
 class MCP3008(object):
