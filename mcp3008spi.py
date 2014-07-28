@@ -17,6 +17,20 @@ class MCP3008 (object):
         else:
             raise InvalidPinSelectionException("adcnum must be between 0-7")
 
+        self._clockpin = clockpin
+        self._mosipin = mosipin
+        self._misopin = misopin
+        self._cspin = cspin
+
+        if len(MCP3008.__pinsused) == 0:
+            GPIO.setmode(GPIO.BCM)
+
+            # set up the SPI interface pins
+            GPIO.setup(self._mosipin, GPIO.OUT)
+            GPIO.setup(self._misopin, GPIO.IN)
+            GPIO.setup(self._clockpin, GPIO.OUT)
+            GPIO.setup(self._cspin, GPIO.OUT)
+
         if adcnum in MCP3008.__pinsused:
             raise SelectedPinInUseException(
                 "Pin already used. MCP3008 pins currently in use: {}".format(MCP3008.__pinsused))
@@ -24,10 +38,6 @@ class MCP3008 (object):
         MCP3008.__pinsused.add(adcnum)
         print("MCP3008 pins in use: {}".format(MCP3008.__pinsused))
 
-        self._clockpin = clockpin
-        self._mosipin = mosipin
-        self._misopin = misopin
-        self._cspin = cspin
 
     def readadc(self):
         """ read SPI data from MCP3008 chip, 8 possible adc's (0 through 7).
