@@ -17,8 +17,6 @@ import sys
 
 from mcp3008spi import MCP3008
 
-
-
 # globals
 DEBUG = 0
 
@@ -44,10 +42,6 @@ def loop():
     while True:  # Go!
         print("x: " + str(x.readadc()) + "\ty: " + str(y.readadc()))
         sleep(0.5)  # wait half a second before reading again
-
-
-# TODO: figure out where/when/how to push a message to a server.
-# TODO: figure out if we need to do an iBeacon transmission here or somewhere else in the OS
 
 
 def main():

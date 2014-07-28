@@ -82,7 +82,6 @@ class MCP3008(object):
         adcout >>= 1  # first bit is 'null' so drop it
         return adcout
 
-
     def __del__(self):
         if DEBUG:
             print("deleting MCP3008 instance {}".format(self._adcnum))
