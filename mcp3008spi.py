@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # This file drives an mcp3008 analog to digital converter on the Raspberry Pi
+
+# based on https://github.com/tomhartley/AirPi/blob/master/sensors/mcp3008.py
+
 __author__ = 'nathan.waddington@akqa.com'
 
 import RPi.GPIO as GPIO
