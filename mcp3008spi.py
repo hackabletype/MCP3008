@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # This file drives an mcp3008 analog to digital converter on the Raspberry Pi
 
-# based on https://github.com/tomhartley/AirPi/blob/master/sensors/mcp3008.py
+# based on https://learn.adafruit.com/reading-a-analog-in-and-controlling-audio-volume-with-the-raspberry-pi/script
 
 __author__ = 'nathan.waddington@akqa.com'
 
